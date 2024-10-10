@@ -51,6 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*---------------------------------------------------------------------------*/
 
 static void cb_name_owned (GDBusConnection *, const gchar *, const gchar *, ConnectPlugin *);
+static void cb_proxy_result (GObject *, GAsyncResult *, ConnectPlugin *);
 static void cb_name_unowned (GDBusConnection *, const gchar *, ConnectPlugin *);
 static void cb_status (GDBusProxy *, char *, char *, GVariant *, ConnectPlugin *);
 static void handle_sign_in (GtkWidget *, ConnectPlugin *);
@@ -75,11 +76,17 @@ static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, Conn
 
 static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar *, ConnectPlugin *c)
 {
-    GError *error = NULL;
     DEBUG ("Name %s owned on DBus", name);
-    
+
     // create the proxy
-    c->proxy = g_dbus_proxy_new_sync (conn, G_DBUS_PROXY_FLAGS_NONE, NULL, name, "/com/raspberrypi/Connect", "com.raspberrypi.Connect", NULL, &error);
+    g_dbus_proxy_new (conn, G_DBUS_PROXY_FLAGS_NONE, NULL, name, "/com/raspberrypi/Connect", "com.raspberrypi.Connect", NULL, (GAsyncReadyCallback) cb_proxy_result, c);
+}
+
+static void cb_proxy_result (GObject *, GAsyncResult *res, ConnectPlugin *c)
+{
+    GError *error = NULL;
+    c->proxy = g_dbus_proxy_new_finish (res, &error);
+
     if (error)
     {
         DEBUG ("Getting proxy - error %s", error->message);
@@ -89,7 +96,7 @@ static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar
     {
         DEBUG ("Getting proxy - success");
 
-        // handle proxy status callbacks
+        // register for proxy status callbacks
         g_signal_connect (c->proxy, "g-signal", G_CALLBACK (cb_status), c);
         handle_status_req (NULL, c);
     }
@@ -98,6 +105,7 @@ static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar
 static void cb_name_unowned (GDBusConnection *, const gchar *name, ConnectPlugin *c)
 {
     DEBUG ("Name %s unowned on DBus", name);
+
     if (c->proxy) g_object_unref (c->proxy);
     c->proxy = NULL;
     c->enabled = FALSE;
@@ -181,6 +189,7 @@ static void cb_result (GObject *source, GAsyncResult *res, ConnectPlugin *)
 
 static void handle_status_req (GtkWidget *, ConnectPlugin *c)
 {
+    DEBUG ("Calling Status");
     g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.Status", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_status_req, c);
 }
 
