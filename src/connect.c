@@ -345,18 +345,38 @@ static void update_icon (ConnectPlugin *c)
     }
     else
     {
-        if (!c->enabled || !c->signed_in) set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
+        if (!c->enabled)
+        {
+            set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
+            gtk_widget_set_tooltip_text (c->tray_icon, _("Disabled - Raspberry Pi Connect"));
+        }
+        else if (!c->signed_in)
+        {
+            set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
+            gtk_widget_set_tooltip_text (c->tray_icon, _("Sign-in required - Raspberry Pi Connect"));
+        }
         else
         {
             if (c->vnc_sess_count + c->ssh_sess_count > 0)
+            {
+                if (c->vnc_sess_count == 0)
+                    gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed via remote shell - Raspberry Pi Connect"));
+                else if (c->vnc_sess_count == 0)
+                    gtk_widget_set_tooltip_text (c->tray_icon, _("Your screen is being shared - Raspberry Pi Connect"));
+                else
+                    gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed - Raspberry Pi Connect"));
+
                 set_taskbar_icon (c->tray_icon, "rpc-active", c->icon_size);
+            }
             else
+            {
                 set_taskbar_icon (c->tray_icon, "rpc-enabled", c->icon_size);
+                gtk_widget_set_tooltip_text (c->tray_icon, _("Signed in - Raspberry Pi Connect"));
+            }
         }
         gtk_widget_show_all (c->plugin);
         gtk_widget_set_sensitive (c->plugin, TRUE);
     }
-    // do the tooltip in here too
 }
 
 /* Handler for menu button click */
@@ -410,8 +430,6 @@ void connect_init (ConnectPlugin *c)
     /* Allocate icon as a child of top level */
     c->tray_icon = gtk_image_new ();
     gtk_container_add (GTK_CONTAINER (c->plugin), c->tray_icon);
-    set_taskbar_icon (c->tray_icon, "rpc-off", c->icon_size);
-    gtk_widget_set_tooltip_text (c->tray_icon, _("Raspberry Pi Connect"));
 
     /* Set up button */
     gtk_button_set_relief (GTK_BUTTON (c->plugin), GTK_RELIEF_NONE);
@@ -436,5 +454,6 @@ void connect_init (ConnectPlugin *c)
 
     /* Show the widget and return */
     gtk_widget_show_all (c->plugin);
+    update_icon (c);
 }
 
