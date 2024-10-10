@@ -101,7 +101,7 @@ static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar
 static void cb_name_unowned (GDBusConnection *, const gchar *name, ConnectPlugin *c)
 {
     DEBUG ("Name %s unowned on DBus", name);
-    g_object_unref (c->proxy);
+    if (c->proxy) g_object_unref (c->proxy);
     c->proxy = NULL;
     c->enabled = FALSE;
     update_icon (c);
@@ -264,14 +264,14 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
 {
     if (c->enabled)
     {
-        system ("systemctl --global -q stop rpi-connect.service");
-        system ("systemctl --global -q disable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
+        system ("systemctl --user -q stop rpi-connect.service");
+        system ("systemctl --user -q disable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
         c->enabled = FALSE;
     }
     else
     {
-        system ("systemctl --global -q enable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
-        system ("systemctl --global -q start rpi-connect.service");
+        system ("systemctl --user -q enable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
+        system ("systemctl --user -q start rpi-connect.service");
         c->enabled = TRUE;
     }
     connect_update_display (c);
