@@ -59,6 +59,10 @@ static void handle_sign_out (GtkWidget *, ConnectPlugin *);
 static void cb_sign_out (GObject *, GAsyncResult *, ConnectPlugin *);
 static void handle_status_req (GtkWidget *, ConnectPlugin *c);
 static void cb_status_req (GObject *, GAsyncResult *, ConnectPlugin *);
+static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *);
+static void cb_toggle_vnc (GObject *, GAsyncResult *, ConnectPlugin *);
+static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *);
+static void cb_toggle_ssh (GObject *, GAsyncResult *, ConnectPlugin *);
 static void toggle_enabled (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
@@ -189,6 +193,64 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
     if (var) g_variant_unref (var);
 }
 
+static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *c)
+{
+    if (c->vnc_on)
+    {
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_vnc, c);
+    }
+    else
+    {
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_vnc, c);
+    }
+}
+
+static void cb_toggle_vnc (GObject *source, GAsyncResult *res, ConnectPlugin *)
+{
+    GError *error = NULL;
+    GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
+
+    if (error)
+    {
+        DEBUG ("VNC change - error %s", error->message);
+        g_error_free (error);
+    }
+    else
+    {
+        DEBUG_VAR ("VNC change - result %s", var);
+    }
+    if (var) g_variant_unref (var);
+}
+
+static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *c)
+{
+    if (c->ssh_on)
+    {
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_ssh, c);
+    }
+    else
+    {
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_ssh, c);
+    }
+}
+
+static void cb_toggle_ssh (GObject *source, GAsyncResult *res, ConnectPlugin *)
+{
+    GError *error = NULL;
+    GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
+
+    if (error)
+    {
+        DEBUG ("SSH change - error %s", error->message);
+        g_error_free (error);
+    }
+    else
+    {
+        DEBUG_VAR ("SSH change - result %s", var);
+    }
+    if (var) g_variant_unref (var);
+}
+
 
 /* GUI... */
 
@@ -236,7 +298,10 @@ static void show_menu (ConnectPlugin *c)
         item = gtk_menu_item_new_with_label (_("Turn Off Connect"));
         g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (toggle_enabled), c);
         gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
-        
+
+        item = gtk_separator_menu_item_new ();
+        gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
+
         if (!c->signed_in)
         {
             item = gtk_menu_item_new_with_label (_("Sign In..."));
@@ -245,11 +310,25 @@ static void show_menu (ConnectPlugin *c)
         }
         else
         {
+            if (c->vnc_avail)
+            {
+                item = gtk_check_menu_item_new_with_label (_("Allow Screen Sharing"));
+                gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), c->vnc_on);
+                g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (handle_toggle_vnc), c);
+                gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
+            }
+
+            item = gtk_check_menu_item_new_with_label (_("Allow Remote Shell Access"));
+            gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), c->ssh_on);
+            g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (handle_toggle_ssh), c);
+            gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
+
+            item = gtk_separator_menu_item_new ();
+            gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
+
             item = gtk_menu_item_new_with_label (_("Sign Out"));
             g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (handle_sign_out), c);
             gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
-            
-            // some more stuff here...
         }
     }
 
