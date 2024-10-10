@@ -54,15 +54,12 @@ static void cb_name_owned (GDBusConnection *, const gchar *, const gchar *, Conn
 static void cb_name_unowned (GDBusConnection *, const gchar *, ConnectPlugin *);
 static void cb_status (GDBusProxy *, char *, char *, GVariant *, ConnectPlugin *);
 static void handle_sign_in (GtkWidget *, ConnectPlugin *);
-static void cb_sign_in (GObject *, GAsyncResult *res, ConnectPlugin *);
 static void handle_sign_out (GtkWidget *, ConnectPlugin *);
-static void cb_sign_out (GObject *, GAsyncResult *, ConnectPlugin *);
+static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *);
+static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *);
+static void cb_result (GObject *, GAsyncResult *, ConnectPlugin *);
 static void handle_status_req (GtkWidget *, ConnectPlugin *c);
 static void cb_status_req (GObject *, GAsyncResult *, ConnectPlugin *);
-static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *);
-static void cb_toggle_vnc (GObject *, GAsyncResult *, ConnectPlugin *);
-static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *);
-static void cb_toggle_ssh (GObject *, GAsyncResult *, ConnectPlugin *);
 static void toggle_enabled (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
@@ -85,12 +82,12 @@ static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar
     c->proxy = g_dbus_proxy_new_sync (conn, G_DBUS_PROXY_FLAGS_NONE, NULL, name, "/com/raspberrypi/Connect", "com.raspberrypi.Connect", NULL, &error);
     if (error)
     {
-        DEBUG ("Error getting proxy - %s", error->message);
+        DEBUG ("Getting proxy - error %s", error->message);
         g_error_free (error);
     }
     else
     {
-        DEBUG ("No error");
+        DEBUG ("Getting proxy - success");
 
         // handle proxy status callbacks
         g_signal_connect (c->proxy, "g-signal", G_CALLBACK (cb_status), c);
@@ -127,44 +124,57 @@ static void cb_status (GDBusProxy *, char *, char *signal, GVariant *params, Con
 
 static void handle_sign_in (GtkWidget *, ConnectPlugin *c)
 {
-    g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.SignIn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_sign_in, c);
-}
-
-static void cb_sign_in (GObject *source, GAsyncResult *res, ConnectPlugin *)
-{
-    GError *error = NULL;
-    GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
-    
-    if (error)
-    {
-        DEBUG ("Sign in - error %s", error->message);
-        g_error_free (error);
-    }
-    else
-    {
-        DEBUG_VAR ("Sign in - result %s", var);
-    }
-    if (var) g_variant_unref (var);
+    DEBUG ("Calling SignIn");
+    g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.SignIn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
 }
 
 static void handle_sign_out (GtkWidget *, ConnectPlugin *c)
 {
-    g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.SignOut", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_sign_out, c);
+    DEBUG ("Calling SignOut");
+    g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.SignOut", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
 }
 
-static void cb_sign_out (GObject *source, GAsyncResult *res, ConnectPlugin *)
+static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *c)
+{
+    if (c->vnc_on)
+    {
+        DEBUG ("Calling VncOff");
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
+    }
+    else
+    {
+        DEBUG ("Calling VncOn");
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
+    }
+}
+
+static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *c)
+{
+    if (c->ssh_on)
+    {
+        DEBUG ("Calling ShellOff");
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
+    }
+    else
+    {
+        DEBUG ("Calling ShellOn");
+        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_result, c);
+    }
+}
+
+static void cb_result (GObject *source, GAsyncResult *res, ConnectPlugin *)
 {
     GError *error = NULL;
     GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
-    
+
     if (error)
     {
-        DEBUG ("Sign out - error %s", error->message);
+        DEBUG ("Result - error %s", error->message);
         g_error_free (error);
     }
     else
     {
-        DEBUG_VAR ("Sign out - result %s", var);
+        DEBUG ("Result - success");
     }
     if (var) g_variant_unref (var);
 }
@@ -193,64 +203,6 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
         DEBUG_VAR ("Status - result %s", var);
         g_variant_get (var, "((bbbbii))", &c->signed_in, &c->vnc_avail, &c->vnc_on, &c->ssh_on, &c->vnc_sess_count, &c->ssh_sess_count);
         update_icon (c);
-    }
-    if (var) g_variant_unref (var);
-}
-
-static void handle_toggle_vnc (GtkWidget *, ConnectPlugin *c)
-{
-    if (c->vnc_on)
-    {
-        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_vnc, c);
-    }
-    else
-    {
-        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.VncOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_vnc, c);
-    }
-}
-
-static void cb_toggle_vnc (GObject *source, GAsyncResult *res, ConnectPlugin *)
-{
-    GError *error = NULL;
-    GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
-
-    if (error)
-    {
-        DEBUG ("VNC change - error %s", error->message);
-        g_error_free (error);
-    }
-    else
-    {
-        DEBUG_VAR ("VNC change - result %s", var);
-    }
-    if (var) g_variant_unref (var);
-}
-
-static void handle_toggle_ssh (GtkWidget *, ConnectPlugin *c)
-{
-    if (c->ssh_on)
-    {
-        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOff", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_ssh, c);
-    }
-    else
-    {
-        g_dbus_proxy_call (c->proxy, "com.raspberrypi.Connect.ShellOn", NULL, G_DBUS_CALL_FLAGS_NONE, -1, NULL, (GAsyncReadyCallback) cb_toggle_ssh, c);
-    }
-}
-
-static void cb_toggle_ssh (GObject *source, GAsyncResult *res, ConnectPlugin *)
-{
-    GError *error = NULL;
-    GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
-
-    if (error)
-    {
-        DEBUG ("SSH change - error %s", error->message);
-        g_error_free (error);
-    }
-    else
-    {
-        DEBUG_VAR ("SSH change - result %s", var);
     }
     if (var) g_variant_unref (var);
 }
@@ -402,9 +354,9 @@ static void connect_gesture_pressed (GtkGestureLongPress *, gdouble x, gdouble y
     press_y = y;
 }
 
-static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, ConnectPlugin *bt)
+static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, ConnectPlugin *c)
 {
-    if (pressed == PRESS_LONG) pass_right_click (bt->plugin, press_x, press_y);
+    if (pressed == PRESS_LONG) pass_right_click (c->plugin, press_x, press_y);
 }
 
 /* Handler for system config changed message from panel */
@@ -414,18 +366,6 @@ void connect_update_display (ConnectPlugin *c)
     update_icon (c);
 }
 
-/* Plugin destructor */
-
-void connect_destructor (gpointer user_data)
-{
-    ConnectPlugin *c = (ConnectPlugin *) user_data;
-
-    g_bus_unwatch_name (c->watch);
-
-    /* Deallocate memory */
-    if (c->gesture) g_object_unref (c->gesture);
-    g_free (c);
-}
 
 /* Plugin constructor */
 
@@ -461,3 +401,13 @@ void connect_init (ConnectPlugin *c)
     update_icon (c);
 }
 
+/* Plugin destructor */
+
+void connect_destructor (ConnectPlugin *c)
+{
+    g_bus_unwatch_name (c->watch);
+
+    /* Deallocate memory */
+    if (c->gesture) g_object_unref (c->gesture);
+    g_free (c);
+}

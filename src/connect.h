@@ -23,6 +23,6 @@ typedef struct {
     int ssh_sess_count;
 } ConnectPlugin;
 
-extern void connect_init (ConnectPlugin *bt);
-extern void connect_update_display (ConnectPlugin *bt);
-extern void connect_destructor (gpointer user_data);
+extern void connect_init (ConnectPlugin *c);
+extern void connect_update_display (ConnectPlugin *c);
+extern void connect_destructor (ConnectPlugin *c);
