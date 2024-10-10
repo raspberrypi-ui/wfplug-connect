@@ -179,6 +179,10 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
     GError *error = NULL;
     GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
     
+    // update the enabled flag here in case it has changed externally
+    if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
+    else c->enabled = FALSE;
+
     if (error)
     {
         DEBUG ("Status - error %s", error->message);
