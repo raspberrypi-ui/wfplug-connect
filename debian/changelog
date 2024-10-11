@@ -1,0 +1,5 @@
+wfplug-connect (0.1) bookworm; urgency=medium
+
+  * Initial release.
+
+ -- Simon Long <simon@raspberrypi.com>  Fri, 10 Oct 2024 11:05:54 +0100
