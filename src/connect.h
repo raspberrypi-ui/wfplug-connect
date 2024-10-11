@@ -13,7 +13,8 @@ typedef struct {
 
     guint watch;
     GDBusProxy *proxy;
-    
+
+    gboolean installed;
     gboolean enabled;
     gboolean signed_in;
     gboolean vnc_avail;

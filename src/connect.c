@@ -62,6 +62,7 @@ static void cb_result (GObject *, GAsyncResult *, ConnectPlugin *);
 static void handle_status_req (GtkWidget *, ConnectPlugin *c);
 static void cb_status_req (GObject *, GAsyncResult *, ConnectPlugin *);
 static void toggle_enabled (GtkWidget *, ConnectPlugin *);
+static void show_help (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
 static void connect_button_press_event (GtkButton *, ConnectPlugin *);
@@ -214,6 +215,9 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
         update_icon (c);
     }
     if (var) g_variant_unref (var);
+
+    // auto sign in
+    if (!c->signed_in) handle_sign_in (NULL, c);
 }
 
 
@@ -315,7 +319,7 @@ static void show_menu (ConnectPlugin *c)
 static void update_icon (ConnectPlugin *c)
 {
     // hide icon if not installed ?
-    if (0)
+    if (!c->installed)
     {
         gtk_widget_hide (c->plugin);
         gtk_widget_set_sensitive (c->plugin, FALSE);
@@ -409,6 +413,9 @@ void connect_init (ConnectPlugin *c)
 
     /* Set up variables */
     c->menu = NULL;
+
+    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
+    else c->installed = FALSE;
 
     if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
     else c->enabled = FALSE;
