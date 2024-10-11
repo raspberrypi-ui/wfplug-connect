@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = "configure" ]; then
+  gtk-update-icon-cache -f -t /usr/share/icons/hicolor
+  pwdlines=$(getent passwd)
+  while read line
+  do
+      USHELL=$(echo "$line" | cut -d: -f7)
+      if grep -q "$USHELL" /etc/shells ; then
+        HOME_DIR=$(echo "$line" | cut -d: -f6)/
+        if [ -e "$HOME_DIR/.config/wf-panel-pi.ini" ] ; then
+          if ! grep -q -w connect "$HOME_DIR/.config/wf-panel-pi.ini" ; then
+            sed "$HOME_DIR/.config/wf-panel-pi.ini" -i -e '/^widgets_right/ s/$/ connect/'
+          fi
+        fi
+      fi
+  done <<EOF
+  $pwdlines
+EOF
+  pkill wf-panel-pi
+fi
+
+#DEBHELPER#
+
+exit 0
