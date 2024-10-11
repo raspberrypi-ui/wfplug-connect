@@ -238,6 +238,11 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
     connect_update_display (c);
 }
 
+static void show_help (GtkWidget *, ConnectPlugin *)
+{
+    system ("x-www-browser https://www.raspberrypi.com/documentation/services/connect.html");
+}
+
 static void show_menu (ConnectPlugin *c)
 {
     GtkWidget *item;
@@ -296,6 +301,13 @@ static void show_menu (ConnectPlugin *c)
             gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
         }
     }
+
+    item = gtk_separator_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
+
+    item = gtk_menu_item_new_with_label (_("Help on Connect..."));
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (show_help), c);
+    gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
     gtk_widget_show_all (c->menu);
 }
