@@ -28,5 +28,11 @@ add_project_arguments('-DPACKAGE_DATA_DIR="' + resource_dir + '"', language : [ 
 add_project_arguments('-DGETTEXT_PACKAGE="' + gettext_package + '"', language : [ 'c', 'cpp' ])
 add_project_arguments('-DPACKAGE_LOCALE_DIR="' + share_dir + '/locale"', language : [ 'c', 'cpp' ])
 
+icons = ['rpc-disabled.png', 'rpc-enabled.png', 'rpc-active.png']
+foreach icon : icons
+  icon_path = join_paths('data', icon)
+  install_data(icon_path, install_dir: get_option('datadir') / 'icons/hicolor/128x128/status')
+endforeach
+
 subdir('src')
 subdir('po')
