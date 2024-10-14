@@ -309,7 +309,7 @@ static void show_menu (ConnectPlugin *c)
     item = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
-    item = gtk_menu_item_new_with_label (_("Help on Connect..."));
+    item = gtk_menu_item_new_with_label (_("Connect Help..."));
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (show_help), c);
     gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
