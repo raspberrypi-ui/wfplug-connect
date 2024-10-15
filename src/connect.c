@@ -263,13 +263,13 @@ static void show_menu (ConnectPlugin *c)
 
     if (!c->enabled) // is it running...
     {
-        item = gtk_menu_item_new_with_label (_("Turn On Connect"));
+        item = gtk_menu_item_new_with_label (_("Turn On Raspberry Pi Connect"));
         g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (toggle_enabled), c);
         gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
     }
     else
     {
-        item = gtk_menu_item_new_with_label (_("Turn Off Connect"));
+        item = gtk_menu_item_new_with_label (_("Turn Off Raspberry Pi Connect"));
         g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (toggle_enabled), c);
         gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
@@ -309,7 +309,7 @@ static void show_menu (ConnectPlugin *c)
     item = gtk_separator_menu_item_new ();
     gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
-    item = gtk_menu_item_new_with_label (_("Connect Help..."));
+    item = gtk_menu_item_new_with_label (_("Raspberry Pi Connect Help..."));
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (show_help), c);
     gtk_menu_shell_append (GTK_MENU_SHELL (c->menu), item);
 
