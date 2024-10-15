@@ -229,14 +229,12 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
 {
     if (c->enabled)
     {
-        system ("systemctl --user -q stop rpi-connect.service");
-        system ("systemctl --user -q disable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
+        system ("systemctl --user status rpi-connect-wayvnc > /dev/null 2>&1 ; if [ $? -eq 4 ] ; then systemctl --user -q disable --now rpi-connect.service ; else systemctl --user -q disable --now rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path ; fi");
         c->enabled = FALSE;
     }
     else
     {
-        system ("systemctl --user -q enable rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path");
-        system ("systemctl --user -q start rpi-connect.service");
+        system ("systemctl --user status rpi-connect-wayvnc > /dev/null 2>&1 ; if [ $? -eq 4 ] ; then systemctl --user -q enable --now rpi-connect.service ; else systemctl --user -q enable --now rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path ; fi");
         c->enabled = TRUE;
     }
     connect_update_display (c);
@@ -414,8 +412,9 @@ void connect_init (ConnectPlugin *c)
     /* Set up variables */
     c->menu = NULL;
 
+    c->installed = FALSE;
     if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
-    else c->installed = FALSE;
+    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
 
     if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
     else c->enabled = FALSE;

@@ -1,3 +1,9 @@
+wfplug-connect (0.2) bookworm; urgency=medium
+
+  * Tweak menu text; adjust some system commands to handle lite
+
+ -- Simon Long <simon@raspberrypi.com>  Tue, 15 Oct 2024 14:50:20 +0100
+
 wfplug-connect (0.1) bookworm; urgency=medium
 
   * Initial release.
