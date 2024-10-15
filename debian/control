@@ -12,6 +12,6 @@ Homepage: http://raspberrypi.com/
 Package: wfplug-connect
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, wf-panel-pi, libwayland-client0,
- libgtkmm-3.0-1v5 (>=3.24)
+ libgtkmm-3.0-1v5 (>=3.24), gtk-update-icon-cache
 Description: Raspberry Pi Connect plugin for wf-panel-pi
  Plugin for wf-panel-pi to control Raspberry Pi Connect.

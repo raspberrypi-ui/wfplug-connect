@@ -19,7 +19,9 @@ if [ "$1" = "configure" ]; then
   done <<EOF
   $pwdlines
 EOF
-  pkill wf-panel-pi
+  if pgrep wf-panel-pi > /dev/null ; then
+    pkill wf-panel-pi
+  fi
 fi
 
 #DEBHELPER#
