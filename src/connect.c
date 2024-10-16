@@ -229,12 +229,12 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
 {
     if (c->enabled)
     {
-        system ("systemctl --user status rpi-connect-wayvnc > /dev/null 2>&1 ; if [ $? -eq 4 ] ; then systemctl --user -q disable --now rpi-connect.service ; else systemctl --user -q disable --now rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path ; fi");
+        system ("rpi-connect off");
         c->enabled = FALSE;
     }
     else
     {
-        system ("systemctl --user status rpi-connect-wayvnc > /dev/null 2>&1 ; if [ $? -eq 4 ] ; then systemctl --user -q enable --now rpi-connect.service ; else systemctl --user -q enable --now rpi-connect.service rpi-connect-wayvnc.service rpi-connect-wayvnc-watcher.path ; fi");
+        system ("rpi-connect on");
         c->enabled = TRUE;
     }
     connect_update_display (c);

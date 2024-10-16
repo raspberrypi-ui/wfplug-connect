@@ -1,3 +1,9 @@
+wfplug-connect (0.3) bookworm; urgency=medium
+
+  * Use rpi-connect CLI to enable and disable
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 16 Oct 2024 07:13:44 +0100
+
 wfplug-connect (0.2) bookworm; urgency=medium
 
   * Tweak menu text; adjust some system commands to handle lite
