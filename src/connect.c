@@ -340,7 +340,7 @@ static void update_icon (ConnectPlugin *c)
             {
                 if (c->vnc_sess_count == 0)
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed via remote shell - Raspberry Pi Connect"));
-                else if (c->vnc_sess_count == 0)
+                else if (c->ssh_sess_count == 0)
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your screen is being shared - Raspberry Pi Connect"));
                 else
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed - Raspberry Pi Connect"));
