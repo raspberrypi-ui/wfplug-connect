@@ -50,6 +50,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Prototypes */
 /*---------------------------------------------------------------------------*/
 
+static void check_installed (ConnectPlugin *c);
 static void cb_name_owned (GDBusConnection *, const gchar *, const gchar *, ConnectPlugin *);
 static void cb_proxy_result (GObject *, GAsyncResult *, ConnectPlugin *);
 static void cb_name_unowned (GDBusConnection *, const gchar *, ConnectPlugin *);
@@ -73,11 +74,22 @@ static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, Conn
 /* Function Definitions */
 /*---------------------------------------------------------------------------*/
 
+/* Helpers */
+
+static void check_installed (ConnectPlugin *c)
+{
+    c->installed = FALSE;
+    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
+    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
+    DEBUG ("Installed state = %d\n", c->installed);
+}
+
 /* Bus watcher callbacks */
 
 static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar *, ConnectPlugin *c)
 {
     DEBUG ("Name %s owned on DBus", name);
+    check_installed (c);
 
     // create the proxy
     g_dbus_proxy_new (conn, G_DBUS_PROXY_FLAGS_NONE, NULL, name, "/com/raspberrypi/Connect", "com.raspberrypi.Connect", NULL, (GAsyncReadyCallback) cb_proxy_result, c);
@@ -110,6 +122,7 @@ static void cb_name_unowned (GDBusConnection *, const gchar *name, ConnectPlugin
     if (c->proxy) g_object_unref (c->proxy);
     c->proxy = NULL;
     c->enabled = FALSE;
+    check_installed (c);
     update_icon (c);
 }
 
@@ -412,9 +425,7 @@ void connect_init (ConnectPlugin *c)
     /* Set up variables */
     c->menu = NULL;
 
-    c->installed = FALSE;
-    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
-    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
+    check_installed (c);
 
     if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
     else c->enabled = FALSE;

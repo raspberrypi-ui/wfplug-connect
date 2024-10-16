@@ -1,3 +1,9 @@
+wfplug-connect (0.6) bookworm; urgency=medium
+
+  * Check installed state on D-Bus owned / unowned signals
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 16 Oct 2024 17:30:53 +0100
+
 wfplug-connect (0.5) bookworm; urgency=medium
 
   * Correct tooltip text
