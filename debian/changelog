@@ -1,3 +1,9 @@
+wfplug-connect (0.7) bookworm; urgency=medium
+
+  * Use global touch-only option for gesture
+
+ -- Simon Long <simon@raspberrypi.com>  Thu, 17 Oct 2024 14:15:19 +0100
+
 wfplug-connect (0.6) bookworm; urgency=medium
 
   * Check installed state on D-Bus owned / unowned signals
