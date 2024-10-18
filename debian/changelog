@@ -1,3 +1,9 @@
+wfplug-connect (0.8) bookworm; urgency=medium
+
+  * Background help browser
+
+ -- Simon Long <simon@raspberrypi.com>  Fri, 18 Oct 2024 10:00:20 +0100
+
 wfplug-connect (0.7) bookworm; urgency=medium
 
   * Use global touch-only option for gesture

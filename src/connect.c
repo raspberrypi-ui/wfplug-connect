@@ -255,7 +255,7 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
 
 static void show_help (GtkWidget *, ConnectPlugin *)
 {
-    system ("x-www-browser https://www.raspberrypi.com/documentation/services/connect.html");
+    system ("x-www-browser https://www.raspberrypi.com/documentation/services/connect.html &");
 }
 
 static void show_menu (ConnectPlugin *c)
