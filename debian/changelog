@@ -1,3 +1,9 @@
+wfplug-connect (0.9) bookworm; urgency=medium
+
+  * Relax installed test
+
+ -- Simon Long <simon@raspberrypi.com>  Tue, 22 Oct 2024 11:57:40 +0100
+
 wfplug-connect (0.8) bookworm; urgency=medium
 
   * Background help browser

@@ -79,8 +79,8 @@ static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, Conn
 static void check_installed (ConnectPlugin *c)
 {
     c->installed = FALSE;
-    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
-    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q ii")) c->installed = TRUE;
+    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
+    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
     DEBUG ("Installed state = %d\n", c->installed);
 }
 
