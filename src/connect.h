@@ -16,6 +16,7 @@ typedef struct {
 
     gboolean installed;
     gboolean enabled;
+    gboolean enabling;
     gboolean signed_in;
     gboolean vnc_avail;
     gboolean vnc_on;

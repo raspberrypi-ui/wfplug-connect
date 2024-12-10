@@ -230,7 +230,11 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
     if (var) g_variant_unref (var);
 
     // auto sign in
-    if (!c->signed_in) handle_sign_in (NULL, c);
+    if (c->enabling)
+    {
+        if (c->enabled && !c->signed_in) handle_sign_in (NULL, c);
+        c->enabling = FALSE;
+    }
 }
 
 
@@ -249,6 +253,7 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
     {
         system ("rpi-connect on");
         c->enabled = TRUE;
+        c->enabling = TRUE;
     }
     connect_update_display (c);
 }
@@ -429,6 +434,7 @@ void connect_init (ConnectPlugin *c)
 
     if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
     else c->enabled = FALSE;
+    c->enabling = FALSE;
 
     /* Set up callbacks to see if Connect is on DBus */
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,

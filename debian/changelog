@@ -1,3 +1,9 @@
+wfplug-connect (0.10) bookworm; urgency=medium
+
+  * Prevent auto sign-in unless in response to turn on from menu
+
+ -- Simon Long <simon@raspberrypi.com>  Tue, 10 Dec 2024 15:17:05 +0000
+
 wfplug-connect (0.9) bookworm; urgency=medium
 
   * Relax installed test
