@@ -1,5 +1,5 @@
-/*
-Copyright (c) 2024 Raspberry Pi (Trading) Ltd.
+/*============================================================================
+Copyright (c) 2024-2025 Raspberry Pi Holdings Ltd.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -23,19 +23,21 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+============================================================================*/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-#include <errno.h>
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 
+#include "lxutils.h"
+
 #include "connect.h"
+
+/*----------------------------------------------------------------------------*/
+/* Typedefs and macros                                                        */
+/*----------------------------------------------------------------------------*/
 
 #define DEBUG_ON
 #ifdef DEBUG_ON
@@ -46,9 +48,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DEBUG_VAR(fmt,var,args...)
 #endif
 
-/*---------------------------------------------------------------------------*/
-/* Prototypes */
-/*---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/* Plug-in global data                                                        */
+/*----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*/
+/* Prototypes                                                                 */
+/*----------------------------------------------------------------------------*/
 
 static void check_installed (ConnectPlugin *c);
 static void cb_name_owned (GDBusConnection *, const gchar *, const gchar *, ConnectPlugin *);
@@ -67,12 +73,10 @@ static void show_help (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
 static void connect_button_press_event (GtkButton *, ConnectPlugin *);
-static void connect_gesture_pressed (GtkGestureLongPress *, gdouble, gdouble, ConnectPlugin *);
-static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, ConnectPlugin *);
 
-/*---------------------------------------------------------------------------*/
-/* Function Definitions */
-/*---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/* Function definitions                                                       */
+/*----------------------------------------------------------------------------*/
 
 /* Helpers */
 
@@ -255,7 +259,7 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *c)
         c->enabled = TRUE;
         c->enabling = TRUE;
     }
-    connect_update_display (c);
+    update_icon (c);
 }
 
 static void show_help (GtkWidget *, ConnectPlugin *)
@@ -376,42 +380,30 @@ static void update_icon (ConnectPlugin *c)
     }
 }
 
-/* Handler for menu button click */
+/*----------------------------------------------------------------------------*/
+/* wf-panel plugin functions                                                  */
+/*----------------------------------------------------------------------------*/
 
+/* Handler for button click */
 static void connect_button_press_event (GtkButton *, ConnectPlugin *c)
 {
-    if (pressed != PRESS_LONG)
-    {   
-        show_menu (c);
-        show_menu_with_kbd (c->plugin, c->menu);
-    }
-    pressed = PRESS_NONE;
-}
-
-static void connect_gesture_pressed (GtkGestureLongPress *, gdouble x, gdouble y, ConnectPlugin *)
-{
-    pressed = PRESS_LONG;
-    press_x = x;
-    press_y = y;
-}
-
-static void connect_gesture_end (GtkGestureLongPress *, GdkEventSequence *, ConnectPlugin *c)
-{
-    if (pressed == PRESS_LONG) pass_right_click (c->plugin, press_x, press_y);
+    CHECK_LONGPRESS
+    show_menu (c);
+    show_menu_with_kbd (c->plugin, c->menu);
 }
 
 /* Handler for system config changed message from panel */
-
 void connect_update_display (ConnectPlugin *c)
 {
     update_icon (c);
 }
 
-
-/* Plugin constructor */
-
 void connect_init (ConnectPlugin *c)
 {
+    setlocale (LC_ALL, "");
+    bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+
     /* Allocate icon as a child of top level */
     c->tray_icon = gtk_image_new ();
     gtk_container_add (GTK_CONTAINER (c->plugin), c->tray_icon);
@@ -421,11 +413,7 @@ void connect_init (ConnectPlugin *c)
     g_signal_connect (c->plugin, "clicked", G_CALLBACK (connect_button_press_event), c);
 
     /* Set up long press */
-    c->gesture = gtk_gesture_long_press_new (c->plugin);
-    gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (c->gesture), touch_only);
-    g_signal_connect (c->gesture, "pressed", G_CALLBACK (connect_gesture_pressed), c);
-    g_signal_connect (c->gesture, "end", G_CALLBACK (connect_gesture_end), c);
-    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (c->gesture), GTK_PHASE_BUBBLE);
+    c->gesture = add_long_press (c->plugin, NULL, NULL);
 
     /* Set up variables */
     c->menu = NULL;
@@ -445,8 +433,6 @@ void connect_init (ConnectPlugin *c)
     update_icon (c);
 }
 
-/* Plugin destructor */
-
 void connect_destructor (ConnectPlugin *c)
 {
     g_bus_unwatch_name (c->watch);
@@ -455,3 +441,7 @@ void connect_destructor (ConnectPlugin *c)
     if (c->gesture) g_object_unref (c->gesture);
     g_free (c);
 }
+
+
+/* End of file */
+/*----------------------------------------------------------------------------*/
