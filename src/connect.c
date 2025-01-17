@@ -26,10 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ============================================================================*/
 
 #include <locale.h>
-#include <stdlib.h>
-#include <string.h>
 #include <glib/gi18n.h>
-#include <gio/gio.h>
 
 #include "lxutils.h"
 
