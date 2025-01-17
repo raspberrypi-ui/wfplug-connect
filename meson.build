@@ -1,5 +1,5 @@
 project(
-    'wfplug_connect',
+    'connect',
     'c',
     'cpp',
     version: '0.8.0',
