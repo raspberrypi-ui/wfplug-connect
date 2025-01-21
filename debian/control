@@ -2,7 +2,7 @@ Source: wfplug-connect
 Section: x11
 Priority: optional
 Maintainer: Simon Long <simon@raspberrypi.com>
-Build-Depends: debhelper-compat (= 13), meson
+Build-Depends: debhelper-compat (= 13), meson,
  libgtkmm-3.0-dev (>= 3.24), wf-panel-pi-dev (>=0.92),
  libgtk-layer-shell-dev (>= 0.6.0), libglm-dev
 Standards-Version: 4.5.1
