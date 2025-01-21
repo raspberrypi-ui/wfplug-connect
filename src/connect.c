@@ -434,7 +434,6 @@ void connect_destructor (ConnectPlugin *c)
 {
     g_bus_unwatch_name (c->watch);
 
-    /* Deallocate memory */
     if (c->gesture) g_object_unref (c->gesture);
     g_free (c);
 }
