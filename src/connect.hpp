@@ -32,10 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <gtkmm/button.h>
 
 extern "C" {
+#include "lxutils.h"
 #include "connect.h"
-extern void connect_init (ConnectPlugin *c);
-extern void connect_update_display (ConnectPlugin *c);
-extern void connect_destructor (ConnectPlugin *c);
 }
 
 class WayfireConnect : public WayfireWidget
