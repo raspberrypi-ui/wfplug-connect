@@ -29,10 +29,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Typedefs and macros */
 /*----------------------------------------------------------------------------*/
 
-typedef struct {
+typedef struct
+{
     int icon_size;                  /* Variables used under wf-panel */
     gboolean bottom;
-    GtkGesture *gesture;
     GtkWidget *plugin;              /* Back pointer to the widget */
 
     GtkWidget *tray_icon;           /* Displayed image */

@@ -409,9 +409,6 @@ void connect_init (ConnectPlugin *c)
     gtk_button_set_relief (GTK_BUTTON (c->plugin), GTK_RELIEF_NONE);
     g_signal_connect (c->plugin, "clicked", G_CALLBACK (connect_button_press_event), c);
 
-    /* Set up long press */
-    c->gesture = add_long_press (c->plugin, NULL, NULL);
-
     /* Set up variables */
     c->menu = NULL;
 
@@ -434,7 +431,6 @@ void connect_destructor (ConnectPlugin *c)
 {
     g_bus_unwatch_name (c->watch);
 
-    if (c->gesture) g_object_unref (c->gesture);
     g_free (c);
 }
 
