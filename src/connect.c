@@ -80,8 +80,7 @@ static void connect_button_press_event (GtkButton *, ConnectPlugin *);
 static void check_installed (ConnectPlugin *c)
 {
     c->installed = FALSE;
-    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
-    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
+    if (!access ("/usr/lib/systemd/user/rpi-connect.service", R_OK)) c->installed = TRUE;
     DEBUG ("Installed state = %d\n", c->installed);
 }
 
@@ -214,7 +213,7 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
     GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
     
     // update the enabled flag here in case it has changed externally
-    if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
+    if (!system ("systemctl --user -q is-active rpi-connect.service")) c->enabled = TRUE;
     else c->enabled = FALSE;
 
     if (error)
@@ -414,8 +413,7 @@ void connect_init (ConnectPlugin *c)
 
     check_installed (c);
 
-    if (!system ("systemctl --user -q status rpi-connect.service | grep -q -w active")) c->enabled = TRUE;
-    else c->enabled = FALSE;
+    c->enabled = FALSE;
     c->enabling = FALSE;
 
     /* Set up callbacks to see if Connect is on DBus */
