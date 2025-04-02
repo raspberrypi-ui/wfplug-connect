@@ -1,3 +1,9 @@
+wfplug-connect (0.13) bookworm; urgency=medium
+
+  * Use apt check for installed / uninstalled in response to DBus operations
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 02 Apr 2025 19:29:34 +0100
+
 wfplug-connect (0.12) bookworm; urgency=medium
 
   * Optimise startup

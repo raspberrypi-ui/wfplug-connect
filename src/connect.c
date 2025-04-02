@@ -80,7 +80,8 @@ static void connect_button_press_event (GtkButton *, ConnectPlugin *);
 static void check_installed (ConnectPlugin *c)
 {
     c->installed = FALSE;
-    if (!access ("/usr/lib/systemd/user/rpi-connect.service", R_OK)) c->installed = TRUE;
+    if (!system ("dpkg -l rpi-connect | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
+    if (!system ("dpkg -l rpi-connect-lite | tail -n 1 | cut -d ' ' -f 1 | grep -q i")) c->installed = TRUE;
     DEBUG ("Installed state = %d\n", c->installed);
 }
 
@@ -411,7 +412,8 @@ void connect_init (ConnectPlugin *c)
     /* Set up variables */
     c->menu = NULL;
 
-    check_installed (c);
+    if (!access ("/usr/lib/systemd/user/rpi-connect.service", R_OK)) c->installed = TRUE;
+    else c->installed = FALSE;
 
     c->enabled = FALSE;
     c->enabling = FALSE;
