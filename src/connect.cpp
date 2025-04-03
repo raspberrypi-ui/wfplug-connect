@@ -53,6 +53,11 @@ void WayfireConnect::icon_size_changed_cb (void)
     connect_update_display (c);
 }
 
+void WayfireConnect::command (const char *cmd)
+{
+    connect_control_msg (c, cmd);
+}
+
 bool WayfireConnect::set_icon (void)
 {
     connect_update_display (c);

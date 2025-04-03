@@ -395,6 +395,26 @@ void connect_update_display (ConnectPlugin *c)
     update_icon (c);
 }
 
+/* Handler for control message */
+gboolean connect_control_msg (ConnectPlugin *c, const char *cmd)
+{
+    if (!strncmp (cmd, "insta", 5))
+    {
+        c->installed = TRUE;
+        update_icon (c);
+        return TRUE;
+    }
+
+    if (!strncmp (cmd, "uninst", 5))
+    {
+        c->installed = FALSE;
+        update_icon (c);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 void connect_init (ConnectPlugin *c)
 {
     setlocale (LC_ALL, "");
