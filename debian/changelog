@@ -1,8 +1,8 @@
 wfplug-connect (0.13) bookworm; urgency=medium
 
-  * Use apt check for installed / uninstalled in response to DBus operations
+  * Add command message for installed / uninstalled; tweaks to package detection
 
- -- Simon Long <simon@raspberrypi.com>  Wed, 02 Apr 2025 19:29:34 +0100
+ -- Simon Long <simon@raspberrypi.com>  Thu, 03 Apr 2025 10:29:34 +0100
 
 wfplug-connect (0.12) bookworm; urgency=medium
 
