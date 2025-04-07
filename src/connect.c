@@ -424,6 +424,7 @@ void connect_init (ConnectPlugin *c)
     /* Allocate icon as a child of top level */
     c->tray_icon = gtk_image_new ();
     gtk_container_add (GTK_CONTAINER (c->plugin), c->tray_icon);
+    set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
 
     /* Set up button */
     gtk_button_set_relief (GTK_BUTTON (c->plugin), GTK_RELIEF_NONE);
@@ -444,7 +445,6 @@ void connect_init (ConnectPlugin *c)
 
     /* Show the widget and return */
     gtk_widget_show_all (c->plugin);
-    update_icon (c);
 }
 
 void connect_destructor (ConnectPlugin *c)
