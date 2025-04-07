@@ -1,5 +1,5 @@
 /*============================================================================
-Copyright (c) 2024-2025 Raspberry Pi Holdings Ltd.
+Copyright (c) 2024-2025 Raspberry Pi
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -424,7 +424,6 @@ void connect_init (ConnectPlugin *c)
     /* Allocate icon as a child of top level */
     c->tray_icon = gtk_image_new ();
     gtk_container_add (GTK_CONTAINER (c->plugin), c->tray_icon);
-    set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
 
     /* Set up button */
     gtk_button_set_relief (GTK_BUTTON (c->plugin), GTK_RELIEF_NONE);
@@ -442,9 +441,6 @@ void connect_init (ConnectPlugin *c)
     /* Set up callbacks to see if Connect is on DBus */
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,
         (GBusNameAppearedCallback) cb_name_owned, (GBusNameVanishedCallback) cb_name_unowned, c, NULL);
-
-    /* Show the widget and return */
-    gtk_widget_show_all (c->plugin);
 }
 
 void connect_destructor (ConnectPlugin *c)

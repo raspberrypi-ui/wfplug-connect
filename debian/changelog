@@ -1,3 +1,9 @@
+wfplug-connect (0.14) bookworm; urgency=medium
+
+  * Set initial state of icon correctly
+
+ -- Simon Long <simon@raspberrypi.com>  Mon, 07 Apr 2025 14:08:16 +0100
+
 wfplug-connect (0.13) bookworm; urgency=medium
 
   * Add command message for installed / uninstalled; tweaks to package detection

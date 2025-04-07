@@ -3,7 +3,7 @@ Upstream-Name: wfplug-connect
 Source: https://github.com/raspberrypi-ui/wfplug-connect.git
 
 Files: *
-Copyright: 2024 Raspberry Pi Holdings Ltd.
+Copyright: 2024 Raspberry Pi
 License: BSD-3-Clause
 
 License: BSD-3-Clause
