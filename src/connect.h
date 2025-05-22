@@ -31,8 +31,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef struct
 {
-    int icon_size;                  /* Variables used under wf-panel */
-    gboolean bottom;
     GtkWidget *plugin;              /* Back pointer to the widget */
 
     GtkWidget *tray_icon;           /* Displayed image */

@@ -345,12 +345,12 @@ static void update_icon (ConnectPlugin *c)
     {
         if (!c->enabled)
         {
-            set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
+            set_taskbar_icon (c->tray_icon, "rpc-disabled", get_icon_size ());
             gtk_widget_set_tooltip_text (c->tray_icon, _("Disabled - Raspberry Pi Connect"));
         }
         else if (!c->signed_in)
         {
-            set_taskbar_icon (c->tray_icon, "rpc-disabled", c->icon_size);
+            set_taskbar_icon (c->tray_icon, "rpc-disabled", get_icon_size ());
             gtk_widget_set_tooltip_text (c->tray_icon, _("Sign-in required - Raspberry Pi Connect"));
         }
         else
@@ -364,11 +364,11 @@ static void update_icon (ConnectPlugin *c)
                 else
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed - Raspberry Pi Connect"));
 
-                set_taskbar_icon (c->tray_icon, "rpc-active", c->icon_size);
+                set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
             }
             else
             {
-                set_taskbar_icon (c->tray_icon, "rpc-enabled", c->icon_size);
+                set_taskbar_icon (c->tray_icon, "rpc-enabled", get_icon_size ());
                 gtk_widget_set_tooltip_text (c->tray_icon, _("Signed in - Raspberry Pi Connect"));
             }
         }

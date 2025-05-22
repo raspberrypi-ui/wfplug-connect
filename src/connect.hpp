@@ -42,8 +42,6 @@ class WayfireConnect : public WayfireWidget
     std::unique_ptr <Gtk::Button> plugin;
     Glib::RefPtr<Gtk::GestureLongPress> gesture;
 
-    WfOption <int> icon_size {"panel/icon_size"};
-    WfOption <std::string> bar_pos {"panel/position"};
     sigc::connection icon_timer;
 
     /* plugin */
@@ -54,8 +52,6 @@ class WayfireConnect : public WayfireWidget
     void init (Gtk::HBox *container) override;
     void command (const char *cmd) override;
     virtual ~WayfireConnect ();
-    void icon_size_changed_cb (void);
-    void bar_pos_changed_cb (void);
     bool set_icon (void);
 };
 
