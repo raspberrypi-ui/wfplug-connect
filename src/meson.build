@@ -1,23 +1,21 @@
 gtkmm = dependency('gtkmm-3.0', version: '>=3.24')
+wfpanel = dependency('wf-panel-pi')
 
-sources = files(
+wsources = files(
   'connect.cpp',
   'connect.c'
 )
 
-deps = [ gtkmm ]
+wdeps = [ gtkmm, wfpanel ]
 
-incdir = include_directories('/usr/include/wf-panel-pi')
+wargs = [ '-DPACKAGE_DATA_DIR="' + wresource_dir + '"', '-DGETTEXT_PACKAGE="wfplug_' + meson.project_name() +'"' ]
 
-args = [ '-DPLUGIN_NAME="' + meson.project_name() + '"', '-DPACKAGE_DATA_DIR="' + resource_dir + '"', '-DGETTEXT_PACKAGE="wfplug_' + meson.project_name() +'"' ]
-
-shared_module('lib' + meson.project_name(), sources,
-        dependencies: deps,
+shared_module('lib' + meson.project_name(), wsources,
+        dependencies: wdeps,
         install: true,
         install_dir: get_option('libdir') / 'wf-panel-pi',
-        c_args : args,
-        cpp_args : args,
-        include_directories : incdir,
+        c_args : wargs,
+        cpp_args : wargs,
         name_prefix: ''
 )
 
