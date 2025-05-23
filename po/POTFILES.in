@@ -1,2 +1,5 @@
-src/connect.cpp
+[encoding: UTF-8]
 src/connect.c
+src/connect.cpp
+src/connect.h
+src/connect.hpp
