@@ -29,6 +29,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Typedefs and macros */
 /*----------------------------------------------------------------------------*/
 
+#define PLUGIN_TITLE N_("Connect")
+
 typedef struct
 {
     GtkWidget *plugin;              /* Back pointer to the widget */
@@ -49,6 +51,8 @@ typedef struct
     int vnc_sess_count;
     int ssh_sess_count;
 } ConnectPlugin;
+
+extern conf_table_t conf_table[1];
 
 /*----------------------------------------------------------------------------*/
 /* Prototypes                                                                 */
