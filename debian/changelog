@@ -1,3 +1,9 @@
+wfplug-connect (0.15) trixie; urgency=medium
+
+  * Further harmonisation with hybrid plugins
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 28 May 2025 18:44:42 +0100
+
 wfplug-connect (0.14) bookworm; urgency=medium
 
   * Set initial state of icon correctly
