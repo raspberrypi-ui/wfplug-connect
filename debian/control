@@ -3,14 +3,14 @@ Section: x11
 Priority: optional
 Maintainer: Simon Long <simon@raspberrypi.com>
 Build-Depends: debhelper-compat (= 13), meson,
- libgtkmm-3.0-dev (>= 3.24), wf-panel-pi-dev (>=0.92),
+ libgtkmm-3.0-dev (>= 3.24), wf-panel-pi-dev (>=1.0),
  libgtk-layer-shell-dev (>= 0.6.0), libglm-dev
 Standards-Version: 4.5.1
 Homepage: http://raspberrypi.com/
 
 Package: wfplug-connect
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, wf-panel-pi (>=0.92),
- gtk-update-icon-cache
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ wf-panel-pi (>=1.0), gtk-update-icon-cache
 Description: Raspberry Pi Connect plugin for wf-panel-pi
  Plugin for wf-panel-pi to control Raspberry Pi Connect.
