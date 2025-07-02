@@ -1,3 +1,9 @@
+wfplug-connect (1.1) trixie; urgency=medium
+
+  * Update icon
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 02 Jul 2025 11:13:33 +0100
+
 wfplug-connect (1.0) trixie; urgency=medium
 
   * Further harmonisation with hybrid plugins
