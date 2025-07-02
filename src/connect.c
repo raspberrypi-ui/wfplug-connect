@@ -384,14 +384,16 @@ static void update_icon (ConnectPlugin *c)
 
 static gboolean animate (ConnectPlugin *c)
 {
-    c->anim_frame++;
-    if (c->anim_frame > 3) c->anim_frame = 0;
+    char *icon;
 
     if (c->vnc_sess_count + c->ssh_sess_count > 0)
     {
-        char *name = g_strdup_printf ("rpc-active%d", c->anim_frame);
-        set_taskbar_icon (c->tray_icon, name, get_icon_size ());
-        g_free (name);
+        c->anim_frame++;
+        if (c->anim_frame > 3) c->anim_frame = 0;
+
+        icon = g_strdup_printf ("rpc-active%d", c->anim_frame);
+        set_taskbar_icon (c->tray_icon, icon, get_icon_size ());
+        g_free (icon);
     }
     return TRUE;
 }
@@ -467,6 +469,8 @@ void connect_init (ConnectPlugin *c)
 void connect_destructor (ConnectPlugin *c)
 {
     g_bus_unwatch_name (c->watch);
+
+    if (c->icon_timer) g_source_remove (c->icon_timer);
 
     g_free (c);
 }
