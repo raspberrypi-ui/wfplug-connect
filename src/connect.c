@@ -368,7 +368,8 @@ static void update_icon (ConnectPlugin *c)
                 else
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed - Raspberry Pi Connect"));
 
-                set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
+                set_taskbar_icon (c->tray_icon, "rpc-active0", get_icon_size ());
+                c->anim_frame = 0;
             }
             else
             {
@@ -379,6 +380,20 @@ static void update_icon (ConnectPlugin *c)
         gtk_widget_show_all (c->plugin);
         gtk_widget_set_sensitive (c->plugin, TRUE);
     }
+}
+
+static gboolean animate (ConnectPlugin *c)
+{
+    c->anim_frame++;
+    if (c->anim_frame > 3) c->anim_frame = 0;
+
+    if (c->vnc_sess_count + c->ssh_sess_count > 0)
+    {
+        char *name = g_strdup_printf ("rpc-active%d", c->anim_frame);
+        set_taskbar_icon (c->tray_icon, name, get_icon_size ());
+        g_free (name);
+    }
+    return TRUE;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -445,6 +460,8 @@ void connect_init (ConnectPlugin *c)
     /* Set up callbacks to see if Connect is on DBus */
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,
         (GBusNameAppearedCallback) cb_name_owned, (GBusNameVanishedCallback) cb_name_unowned, c, NULL);
+
+    c->icon_timer = g_timeout_add (1000, G_SOURCE_FUNC (animate), c);
 }
 
 void connect_destructor (ConnectPlugin *c)

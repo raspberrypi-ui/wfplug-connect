@@ -50,6 +50,8 @@ typedef struct
     gboolean ssh_on;
     int vnc_sess_count;
     int ssh_sess_count;
+    int icon_timer;
+    int anim_frame;
 } ConnectPlugin;
 
 extern conf_table_t conf_table[1];
