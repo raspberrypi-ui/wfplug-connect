@@ -45,6 +45,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DEBUG_VAR(fmt,var,args...)
 #endif
 
+#define ANIM_FRAMES 8
+#define ANIM_TIME   500
+
 /*----------------------------------------------------------------------------*/
 /* Global data                                                                */
 /*----------------------------------------------------------------------------*/
@@ -389,7 +392,7 @@ static gboolean animate (ConnectPlugin *c)
     if (c->vnc_sess_count + c->ssh_sess_count > 0)
     {
         c->anim_frame++;
-        if (c->anim_frame > 3) c->anim_frame = 0;
+        if (c->anim_frame > (ANIM_FRAMES - 1)) c->anim_frame = 0;
 
         icon = g_strdup_printf ("rpc-active%d", c->anim_frame);
         set_taskbar_icon (c->tray_icon, icon, get_icon_size ());
@@ -463,7 +466,7 @@ void connect_init (ConnectPlugin *c)
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,
         (GBusNameAppearedCallback) cb_name_owned, (GBusNameVanishedCallback) cb_name_unowned, c, NULL);
 
-    c->icon_timer = g_timeout_add (1000, G_SOURCE_FUNC (animate), c);
+    c->icon_timer = g_timeout_add (ANIM_TIME, G_SOURCE_FUNC (animate), c);
 }
 
 void connect_destructor (ConnectPlugin *c)
