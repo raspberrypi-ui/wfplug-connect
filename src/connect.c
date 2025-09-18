@@ -52,8 +52,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* Global data                                                                */
 /*----------------------------------------------------------------------------*/
 
-conf_table_t conf_table[1] = {
-    {CONF_TYPE_NONE, NULL, NULL, NULL}
+conf_table_t conf_table[2] = {
+    {CONF_TYPE_BOOL, "animate_icon",    N_("Animate Icon"), NULL},
+    {CONF_TYPE_NONE, NULL,              NULL,               NULL}
 };
 
 /*----------------------------------------------------------------------------*/
@@ -76,6 +77,7 @@ static void toggle_enabled (GtkWidget *, ConnectPlugin *);
 static void show_help (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
+static gboolean animate (ConnectPlugin *c);
 static void connect_button_press_event (GtkButton *, ConnectPlugin *);
 
 /*----------------------------------------------------------------------------*/
@@ -392,7 +394,7 @@ static gboolean animate (ConnectPlugin *c)
     if (c->vnc_sess_count + c->ssh_sess_count > 0)
     {
         c->anim_frame++;
-        if (c->anim_frame > (ANIM_FRAMES - 1)) c->anim_frame = 0;
+        if (c->anim_frame > (ANIM_FRAMES - 1) || c->animate == FALSE) c->anim_frame = 0;
 
         icon = g_strdup_printf ("rpc-active%d", c->anim_frame);
         set_taskbar_icon (c->tray_icon, icon, get_icon_size ());

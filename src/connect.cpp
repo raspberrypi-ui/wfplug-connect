@@ -38,6 +38,16 @@ extern "C" {
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
+void WayfireConnect::read_settings (void)
+{
+    c->animate = animate_icon;
+}
+
+void WayfireConnect::settings_changed_cb (void)
+{
+    read_settings ();
+}
+
 void WayfireConnect::command (const char *cmd)
 {
     connect_control_msg (c, cmd);
@@ -65,7 +75,11 @@ void WayfireConnect::init (Gtk::HBox *container)
     gesture = add_longpress_default (*plugin);
 
     /* Initialise the plugin */
+    read_settings ();
     connect_init (c);
+
+    /* Setup callbacks */
+    animate_icon.set_callback (sigc::mem_fun (*this, &WayfireConnect::settings_changed_cb));
 }
 
 WayfireConnect::~WayfireConnect()

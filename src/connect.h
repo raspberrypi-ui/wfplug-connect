@@ -52,9 +52,10 @@ typedef struct
     int ssh_sess_count;
     int icon_timer;
     int anim_frame;
+    gboolean animate;
 } ConnectPlugin;
 
-extern conf_table_t conf_table[1];
+extern conf_table_t conf_table[2];
 
 /*----------------------------------------------------------------------------*/
 /* Prototypes                                                                 */

@@ -19,5 +19,7 @@ shared_module('lib' + meson.project_name(), wsources,
         name_prefix: ''
 )
 
-metadata = files()
+metadata = files(
+  'connect.xml'
+)
 install_data(metadata, install_dir: metadata_dir)

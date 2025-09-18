@@ -44,6 +44,8 @@ class WayfireConnect : public WayfireWidget
 
     sigc::connection icon_timer;
 
+    WfOption <bool> animate_icon {"panel/connect_animate_icon"};
+
     /* plugin */
     ConnectPlugin *c;
 
@@ -53,6 +55,8 @@ class WayfireConnect : public WayfireWidget
     void command (const char *cmd) override;
     virtual ~WayfireConnect ();
     bool set_icon (void);
+    void read_settings (void);
+    void settings_changed_cb (void);
 };
 
 #endif /* end of include guard: WIDGETS_CONNECT_HPP */
