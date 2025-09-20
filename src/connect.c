@@ -45,7 +45,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DEBUG_VAR(fmt,var,args...)
 #endif
 
-#define ANIM_FRAMES 8
 #define ANIM_TIME   500
 
 /*----------------------------------------------------------------------------*/
@@ -389,18 +388,28 @@ static void update_icon (ConnectPlugin *c)
 
 static gboolean animate (ConnectPlugin *c)
 {
-    char *icon;
-
-    if (c->vnc_sess_count + c->ssh_sess_count > 0)
+    if (c->enabled && c->signed_in && c->vnc_sess_count + c->ssh_sess_count > 0)
     {
         c->anim_frame++;
         if (c->anim_frame > (ANIM_FRAMES - 1) || c->animate == FALSE) c->anim_frame = 0;
-
-        icon = g_strdup_printf ("rpc-active%d", c->anim_frame);
-        set_taskbar_icon (c->tray_icon, icon, get_icon_size ());
-        g_free (icon);
+        gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
     }
     return TRUE;
+}
+
+static void cache_animation (ConnectPlugin *c)
+{
+    char *iname;
+    int count;
+
+    for (count = 0; count < ANIM_FRAMES; count++)
+    {
+        if (c->anim[count]) g_object_unref (c->anim[count]);
+        iname = g_strdup_printf ("rpc-active%d", count);
+        c->anim[count] = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), iname,
+            get_icon_size (), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+        g_free (iname);
+    }
 }
 
 /*----------------------------------------------------------------------------*/
@@ -418,6 +427,7 @@ static void connect_button_press_event (GtkButton *, ConnectPlugin *c)
 /* Handler for system config changed message from panel */
 void connect_update_display (ConnectPlugin *c)
 {
+    cache_animation (c);
     update_icon (c);
 }
 
@@ -443,6 +453,8 @@ gboolean connect_control_msg (ConnectPlugin *c, const char *cmd)
 
 void connect_init (ConnectPlugin *c)
 {
+    int count;
+
     setlocale (LC_ALL, "");
     bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -463,6 +475,10 @@ void connect_init (ConnectPlugin *c)
 
     c->enabled = FALSE;
     c->enabling = FALSE;
+    for (count = 0; count < ANIM_FRAMES; count++) c->anim[count] = NULL;
+
+    /* Cache animation */
+    cache_animation (c);
 
     /* Set up callbacks to see if Connect is on DBus */
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,
@@ -473,9 +489,14 @@ void connect_init (ConnectPlugin *c)
 
 void connect_destructor (ConnectPlugin *c)
 {
+    int count;
+
     g_bus_unwatch_name (c->watch);
 
     if (c->icon_timer) g_source_remove (c->icon_timer);
+
+    for (count = 0; count < ANIM_FRAMES; count++)
+        if (c->anim[count]) g_object_unref (c->anim[count]);
 
     g_free (c);
 }

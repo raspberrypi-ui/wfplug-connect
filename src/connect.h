@@ -31,6 +31,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define PLUGIN_TITLE N_("Connect")
 
+#define ANIM_FRAMES 8
+
 typedef struct
 {
     GtkWidget *plugin;              /* Back pointer to the widget */
@@ -53,6 +55,7 @@ typedef struct
     int icon_timer;
     int anim_frame;
     gboolean animate;
+    GdkPixbuf *anim[ANIM_FRAMES];
 } ConnectPlugin;
 
 extern conf_table_t conf_table[2];
