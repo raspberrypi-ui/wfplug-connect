@@ -390,9 +390,20 @@ static gboolean animate (ConnectPlugin *c)
 {
     if (c->enabled && c->signed_in && c->vnc_sess_count + c->ssh_sess_count > 0)
     {
-        c->anim_frame++;
-        if (c->anim_frame > (ANIM_FRAMES - 1) || c->animate == FALSE) c->anim_frame = 0;
-        gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+        if (c->animate)
+        {
+            c->anim_frame++;
+            if (c->anim_frame > (ANIM_FRAMES - 1)) c->anim_frame = 0;
+            gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+        }
+        else
+        {
+            if (c->anim_frame != -1)
+            {
+                gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[0]);
+                c->anim_frame = -1;
+            }
+        }
     }
     return TRUE;
 }
