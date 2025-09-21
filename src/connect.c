@@ -77,6 +77,7 @@ static void show_help (GtkWidget *, ConnectPlugin *);
 static void show_menu (ConnectPlugin *);
 static void update_icon (ConnectPlugin *);
 static gboolean animate (ConnectPlugin *c);
+static void cache_animation (ConnectPlugin *c, gboolean clear);
 static void connect_button_press_event (GtkButton *, ConnectPlugin *);
 
 /*----------------------------------------------------------------------------*/
@@ -408,14 +409,14 @@ static gboolean animate (ConnectPlugin *c)
     return TRUE;
 }
 
-static void cache_animation (ConnectPlugin *c)
+static void cache_animation (ConnectPlugin *c, gboolean clear)
 {
     char *iname;
     int count;
 
     for (count = 0; count < ANIM_FRAMES; count++)
     {
-        if (c->anim[count]) g_object_unref (c->anim[count]);
+        if (clear && c->anim[count]) g_object_unref (c->anim[count]);
         iname = g_strdup_printf ("rpc-active%d", count);
         c->anim[count] = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), iname,
             get_icon_size (), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
@@ -438,7 +439,7 @@ static void connect_button_press_event (GtkButton *, ConnectPlugin *c)
 /* Handler for system config changed message from panel */
 void connect_update_display (ConnectPlugin *c)
 {
-    cache_animation (c);
+    cache_animation (c, TRUE);
     update_icon (c);
 }
 
@@ -464,8 +465,6 @@ gboolean connect_control_msg (ConnectPlugin *c, const char *cmd)
 
 void connect_init (ConnectPlugin *c)
 {
-    int count;
-
     setlocale (LC_ALL, "");
     bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
     bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -486,10 +485,9 @@ void connect_init (ConnectPlugin *c)
 
     c->enabled = FALSE;
     c->enabling = FALSE;
-    for (count = 0; count < ANIM_FRAMES; count++) c->anim[count] = NULL;
 
     /* Cache animation */
-    cache_animation (c);
+    cache_animation (c, FALSE);
 
     /* Set up callbacks to see if Connect is on DBus */
     c->watch = g_bus_watch_name (G_BUS_TYPE_SESSION, "com.raspberrypi.Connect", 0,
