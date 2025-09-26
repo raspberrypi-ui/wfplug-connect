@@ -373,8 +373,16 @@ static void update_icon (ConnectPlugin *c)
                 else
                     gtk_widget_set_tooltip_text (c->tray_icon, _("Your device is being accessed - Raspberry Pi Connect"));
 
-                set_taskbar_icon (c->tray_icon, "rpc-active0", get_icon_size ());
-                c->anim_frame = 0;
+                if (c->animate)
+                {
+                    c->anim_frame = 0;
+                    gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+                }
+                else
+                {
+                    set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
+                    c->anim_frame = -1;
+                }
             }
             else
             {
@@ -401,7 +409,7 @@ static gboolean animate (ConnectPlugin *c)
         {
             if (c->anim_frame != -1)
             {
-                gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[0]);
+                set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
                 c->anim_frame = -1;
             }
         }
