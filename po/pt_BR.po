@@ -1,0 +1,75 @@
+# Brazilian Portuguese translations for wfplug_connect package.
+# Copyright (C) 2025 Raspberry Pi Ltd
+# This file is distributed under the same license as the wfplug_connect package.
+# Eduardo Addad de Oliveira <eduardo@addadtech.com.br>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wfplug_connect\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-27 23:34+0900\n"
+"PO-Revision-Date: 2025-10-05 21:55-0300\n"
+"Last-Translator: Eduardo Addad de Oliveira <eduardo@addadtech.com.br>\n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.7\n"
+
+#: src/connect.cpp:40
+msgid "Connect"
+msgstr "Conectar"
+
+#: src/connect.c:283
+msgid "Turn On Raspberry Pi Connect"
+msgstr "Ativar Raspberry Pi Connect"
+
+#: src/connect.c:289
+msgid "Turn Off Raspberry Pi Connect"
+msgstr "Desativar Raspberry Pi Connect"
+
+#: src/connect.c:298
+msgid "Sign In..."
+msgstr "Entrar"
+
+#: src/connect.c:306
+msgid "Allow Screen Sharing"
+msgstr "Permitir compartilhamento de tela"
+
+#: src/connect.c:312
+msgid "Allow Remote Shell Access"
+msgstr "Permitir acesso remoto ao shell"
+
+#: src/connect.c:320
+msgid "Sign Out"
+msgstr "Sair"
+
+#: src/connect.c:329
+msgid "Raspberry Pi Connect Help..."
+msgstr "Ajuda do Raspberry Pi Connect"
+
+#: src/connect.c:349
+msgid "Disabled - Raspberry Pi Connect"
+msgstr "Desativado - Raspberry Pi Connect"
+
+#: src/connect.c:354
+msgid "Sign-in required - Raspberry Pi Connect"
+msgstr "Login necessário - Raspberry Pi Connect"
+
+#: src/connect.c:361
+msgid "Your device is being accessed via remote shell - Raspberry Pi Connect"
+msgstr "Seu dispositivo está sendo acessado por meio do shell remoto - Raspberry Pi Connect"
+
+#: src/connect.c:363
+msgid "Your screen is being shared - Raspberry Pi Connect"
+msgstr "Sua teka está sendo compartilhada - Raspberry Pi Connect"
+
+#: src/connect.c:365
+msgid "Your device is being accessed - Raspberry Pi Connect"
+msgstr "Seu dispositivo está sendo acessado - Raspberry Pi Connect"
+
+#: src/connect.c:372
+msgid "Signed in - Raspberry Pi Connect"
+msgstr "Entrar - Raspberry Pi Connect"
