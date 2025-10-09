@@ -64,7 +64,7 @@ msgstr "Seu dispositivo está sendo acessado por meio do shell remoto - Raspberr
 
 #: src/connect.c:363
 msgid "Your screen is being shared - Raspberry Pi Connect"
-msgstr "Sua teka está sendo compartilhada - Raspberry Pi Connect"
+msgstr "Sua tela está sendo compartilhada - Raspberry Pi Connect"
 
 #: src/connect.c:365
 msgid "Your device is being accessed - Raspberry Pi Connect"
