@@ -376,7 +376,14 @@ static void update_icon (ConnectPlugin *c)
                 if (c->animate)
                 {
                     c->anim_frame = 0;
-                    gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+                    int scale = gtk_widget_get_scale_factor (c->tray_icon);
+                    if (scale == 1) gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+                    else
+                    {
+                        cairo_surface_t *cr = gdk_cairo_surface_create_from_pixbuf (c->anim[c->anim_frame], scale, NULL);
+                        gtk_image_set_from_surface (GTK_IMAGE (c->tray_icon), cr);
+                        cairo_surface_destroy (cr);
+                    }
                 }
                 else
                 {
@@ -403,7 +410,14 @@ static gboolean animate (ConnectPlugin *c)
         {
             c->anim_frame++;
             if (c->anim_frame > (ANIM_FRAMES - 1)) c->anim_frame = 0;
-            gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+            int scale = gtk_widget_get_scale_factor (c->tray_icon);
+            if (scale == 1) gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
+            else
+            {
+                cairo_surface_t *cr = gdk_cairo_surface_create_from_pixbuf (c->anim[c->anim_frame], scale, NULL);
+                gtk_image_set_from_surface (GTK_IMAGE (c->tray_icon), cr);
+                cairo_surface_destroy (cr);
+            }
         }
         else
         {
@@ -426,8 +440,8 @@ static void cache_animation (ConnectPlugin *c, gboolean clear)
     {
         if (clear && c->anim[count]) g_object_unref (c->anim[count]);
         iname = g_strdup_printf ("rpc-active%d", count);
-        c->anim[count] = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (), iname,
-            get_icon_size (), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+        c->anim[count] = gtk_icon_theme_load_icon_for_scale (gtk_icon_theme_get_default (), iname,
+            get_icon_size (), gtk_widget_get_scale_factor (c->tray_icon), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
         g_free (iname);
     }
 }
