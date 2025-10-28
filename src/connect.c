@@ -376,19 +376,12 @@ static void update_icon (ConnectPlugin *c)
                 if (c->animate)
                 {
                     c->anim_frame = 0;
-                    int scale = gtk_widget_get_scale_factor (c->tray_icon);
-                    if (scale == 1) gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
-                    else
-                    {
-                        cairo_surface_t *cr = gdk_cairo_surface_create_from_pixbuf (c->anim[c->anim_frame], scale, NULL);
-                        gtk_image_set_from_surface (GTK_IMAGE (c->tray_icon), cr);
-                        cairo_surface_destroy (cr);
-                    }
+                    set_image_from_pixbuf (c->tray_icon, c->anim[c->anim_frame]);
                 }
                 else
                 {
-                    set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
                     c->anim_frame = -1;
+                    set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
                 }
             }
             else
@@ -410,14 +403,7 @@ static gboolean animate (ConnectPlugin *c)
         {
             c->anim_frame++;
             if (c->anim_frame > (ANIM_FRAMES - 1)) c->anim_frame = 0;
-            int scale = gtk_widget_get_scale_factor (c->tray_icon);
-            if (scale == 1) gtk_image_set_from_pixbuf (GTK_IMAGE (c->tray_icon), c->anim[c->anim_frame]);
-            else
-            {
-                cairo_surface_t *cr = gdk_cairo_surface_create_from_pixbuf (c->anim[c->anim_frame], scale, NULL);
-                gtk_image_set_from_surface (GTK_IMAGE (c->tray_icon), cr);
-                cairo_surface_destroy (cr);
-            }
+            set_image_from_pixbuf (c->tray_icon, c->anim[c->anim_frame]);
         }
         else
         {
