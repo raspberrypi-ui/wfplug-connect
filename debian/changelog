@@ -1,3 +1,9 @@
+wfplug-connect (1.9) trixie; urgency=medium
+
+  * Add larger icons
+
+ -- Simon Long <simon@raspberrypi.com>  Mon, 03 Nov 2025 13:06:51 +0000
+
 wfplug-connect (1.8) trixie; urgency=medium
 
   * Add Portuguese translation
