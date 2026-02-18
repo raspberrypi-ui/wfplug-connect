@@ -354,12 +354,12 @@ static void update_icon (ConnectPlugin *c)
     {
         if (!c->enabled)
         {
-            set_taskbar_icon (c->tray_icon, "rpc-disabled", get_icon_size ());
+            wrap_set_taskbar_icon (c, c->tray_icon, "rpc-disabled");
             gtk_widget_set_tooltip_text (c->tray_icon, _("Disabled - Raspberry Pi Connect"));
         }
         else if (!c->signed_in)
         {
-            set_taskbar_icon (c->tray_icon, "rpc-disabled", get_icon_size ());
+            wrap_set_taskbar_icon (c, c->tray_icon, "rpc-disabled");
             gtk_widget_set_tooltip_text (c->tray_icon, _("Sign-in required - Raspberry Pi Connect"));
         }
         else
@@ -381,12 +381,12 @@ static void update_icon (ConnectPlugin *c)
                 else
                 {
                     c->anim_frame = -1;
-                    set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
+                    wrap_set_taskbar_icon (c, c->tray_icon, "rpc-active");
                 }
             }
             else
             {
-                set_taskbar_icon (c->tray_icon, "rpc-enabled", get_icon_size ());
+                wrap_set_taskbar_icon (c, c->tray_icon, "rpc-enabled");
                 gtk_widget_set_tooltip_text (c->tray_icon, _("Signed in - Raspberry Pi Connect"));
             }
         }
@@ -409,7 +409,7 @@ static gboolean animate (ConnectPlugin *c)
         {
             if (c->anim_frame != -1)
             {
-                set_taskbar_icon (c->tray_icon, "rpc-active", get_icon_size ());
+                wrap_set_taskbar_icon (c, c->tray_icon, "rpc-active");
                 c->anim_frame = -1;
             }
         }
@@ -427,7 +427,7 @@ static void cache_animation (ConnectPlugin *c, gboolean clear)
         if (clear && c->anim[count]) g_object_unref (c->anim[count]);
         iname = g_strdup_printf ("rpc-active%d", count);
         c->anim[count] = gtk_icon_theme_load_icon_for_scale (gtk_icon_theme_get_default (), iname,
-            get_icon_size (), gtk_widget_get_scale_factor (c->tray_icon), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+            get_icon_size (c->plugin), gtk_widget_get_scale_factor (c->tray_icon), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
         g_free (iname);
     }
 }
