@@ -427,7 +427,7 @@ static void cache_animation (ConnectPlugin *c, gboolean clear)
         if (clear && c->anim[count]) g_object_unref (c->anim[count]);
         iname = g_strdup_printf ("rpc-active%d", count);
         c->anim[count] = gtk_icon_theme_load_icon_for_scale (gtk_icon_theme_get_default (), iname,
-            get_icon_size (c->plugin), gtk_widget_get_scale_factor (c->tray_icon), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+            get_icon_size (), gtk_widget_get_scale_factor (c->tray_icon), GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
         g_free (iname);
     }
 }
