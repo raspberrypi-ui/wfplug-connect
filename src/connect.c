@@ -426,7 +426,7 @@ static void cache_animation (ConnectPlugin *c, gboolean clear)
     {
         if (clear && c->anim[count]) g_object_unref (c->anim[count]);
         iname = g_strdup_printf ("rpc-active%d", count);
-        c->anim[count] = load_taskbar_pixbuf (c->plugin, iname);
+        c->anim[count] = wrap_load_taskbar_pixbuf (c, c->tray_icon, iname);
         g_free (iname);
     }
 }

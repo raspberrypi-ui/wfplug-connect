@@ -1,3 +1,9 @@
+wfplug-connect (1.10) trixie; urgency=medium
+
+  * Use wrapped icon functions; rebuild against latest APIs
+
+ -- Simon Long <simon@raspberrypi.com>  Fri, 20 Feb 2026 10:09:56 +0000
+
 wfplug-connect (1.9) trixie; urgency=medium
 
   * Add larger icons
