@@ -1,3 +1,9 @@
+wfplug-connect (1.11) trixie; urgency=medium
+
+  * Add Polish translation
+
+ -- Simon Long <simon@raspberrypi.com>  Mon, 18 May 2026 11:46:38 +0100
+
 wfplug-connect (1.10) trixie; urgency=medium
 
   * Use wrapped icon functions; rebuild against latest APIs
