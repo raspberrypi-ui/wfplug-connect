@@ -1,0 +1,80 @@
+# Polish translations for wfplug-connect package
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the wfplug-connect package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 18:36+0200\n"
+"PO-Revision-Date: 2026-04-17 18:40+0200\n"
+"Last-Translator: Skotniczny <skotniczny@outlook.com>\n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: ../src/connect.c:55
+msgid "Animate Icon"
+msgstr "Animuj ikonę"
+
+#: ../src/connect.c:292
+msgid "Turn On Raspberry Pi Connect"
+msgstr "Włącz Raspberry Pi Connect"
+
+#: ../src/connect.c:298
+msgid "Turn Off Raspberry Pi Connect"
+msgstr "Wyłącz Raspberry Pi Connect"
+
+#: ../src/connect.c:307
+msgid "Sign In..."
+msgstr "Zaloguj…"
+
+#: ../src/connect.c:315
+msgid "Allow Screen Sharing"
+msgstr "Zezwól na udostępnianie ekranu"
+
+#: ../src/connect.c:321
+msgid "Allow Remote Shell Access"
+msgstr "Zezwól na zdalny dostęp do powłoki"
+
+#: ../src/connect.c:329
+msgid "Sign Out"
+msgstr "Wyloguj"
+
+#: ../src/connect.c:338
+msgid "Raspberry Pi Connect Help..."
+msgstr "Pomoc Raspberry Pi Connect…"
+
+#: ../src/connect.c:358
+msgid "Disabled - Raspberry Pi Connect"
+msgstr "Wyłączone – Raspberry Pi Connect"
+
+#: ../src/connect.c:363
+msgid "Sign-in required - Raspberry Pi Connect"
+msgstr "Wymagane logowanie – Raspberry Pi Connect"
+
+#: ../src/connect.c:370
+msgid "Your device is being accessed via remote shell - Raspberry Pi Connect"
+msgstr "Trwa zdalny dostęp do Twojego urządzenia przez powłokę – Raspberry Pi Connect"
+
+#: ../src/connect.c:372
+msgid "Your screen is being shared - Raspberry Pi Connect"
+msgstr "Twój ekran jest udostępniany – Raspberry Pi Connect"
+
+#: ../src/connect.c:374
+msgid "Your device is being accessed - Raspberry Pi Connect"
+msgstr "Trwa zdalny dostęp do Twojego urządzenia – Raspberry Pi Connect"
+
+#: ../src/connect.c:390
+msgid "Signed in - Raspberry Pi Connect"
+msgstr "Zalogowano – Raspberry Pi Connect"
+
+#. End of file
+#. ----------------------------------------------------------------------------
+#: ../src/connect.h:32
+msgid "Connect"
+msgstr "Connect"
