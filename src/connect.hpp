@@ -44,7 +44,7 @@ class WayfireConnect : public WayfireWidget
 
     sigc::connection icon_timer;
 
-    WfOption <bool> animate_icon {"panel/connect_animate_icon"};
+    WfOption <bool> animate_icon {"connect/animate_icon"};
 
     /* plugin */
     ConnectPlugin *c;

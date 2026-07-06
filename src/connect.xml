@@ -1,13 +1,10 @@
 <?xml version="1.0"?>
 <wf-panel-pi>
-	<plugin name="panel">
-	<_short>Panel</_short>
+  <plugin name="connect">
 	<group>
-	<_short>Connect</_short>
-	<option name="connect_animate_icon" type="bool">
-		<_short>Connect Animate Connected Icon</_short>
+	  <option name="animate_icon" type="bool">
 		<default>true</default>
-	</option>
+	  </option>
 	</group>
-	</plugin>
+  </plugin>
 </wf-panel-pi>
