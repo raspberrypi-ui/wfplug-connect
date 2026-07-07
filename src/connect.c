@@ -483,6 +483,7 @@ void connect_init (ConnectPlugin *c)
     /* Set up button */
     gtk_button_set_relief (GTK_BUTTON (c->plugin), GTK_RELIEF_NONE);
     g_signal_connect (c->plugin, "clicked", G_CALLBACK (connect_button_press_event), c);
+    add_long_press (c->plugin, NULL, NULL);
 
     /* Set up variables */
     c->menu = NULL;
