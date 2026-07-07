@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 typedef struct
 {
     GtkWidget *plugin;              /* Back pointer to the widget */
+    GtkGesture *gesture;
 
     GtkWidget *tray_icon;           /* Displayed image */
     GtkWidget *menu; 
