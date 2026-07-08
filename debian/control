@@ -11,6 +11,6 @@ Homepage: http://raspberrypi.com/
 Package: wfplug-connect
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
- wf-panel-pi (>=1.10), gtk-update-icon-cache
+ wf-panel-pi (>=1.18), gtk-update-icon-cache
 Description: Raspberry Pi Connect plugin for wf-panel-pi
  Plugin for wf-panel-pi to control Raspberry Pi Connect.
