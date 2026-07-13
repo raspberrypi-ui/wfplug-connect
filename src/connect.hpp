@@ -36,7 +36,7 @@ extern "C" {
 #include "connect.h"
 }
 
-class WayfireConnect : public WayfireWidget
+class WidgetConnect : public PanelWidget
 {
     std::unique_ptr <Gtk::Button> plugin;
 
@@ -51,7 +51,7 @@ class WayfireConnect : public WayfireWidget
 
     void init (Gtk::HBox *container) override;
     void command (const char *cmd) override;
-    virtual ~WayfireConnect ();
+    virtual ~WidgetConnect ();
     bool set_icon (void);
     void read_settings (void);
     void settings_changed_cb (void);

@@ -29,36 +29,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "connect.hpp"
 
 extern "C" {
-    WayfireWidget *create () { return new WayfireConnect; }
-    void destroy (WayfireWidget *w) { delete w; }
+    PanelWidget *create () { return new WidgetConnect; }
+    void destroy (PanelWidget *w) { delete w; }
 
     const conf_table_t *config_params (void) { return conf_table; };
     const char *display_name (void) { return PLUGIN_TITLE; };
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
-void WayfireConnect::read_settings (void)
+void WidgetConnect::read_settings (void)
 {
     c->animate = animate_icon;
 }
 
-void WayfireConnect::settings_changed_cb (void)
+void WidgetConnect::settings_changed_cb (void)
 {
     read_settings ();
 }
 
-void WayfireConnect::command (const char *cmd)
+void WidgetConnect::command (const char *cmd)
 {
     connect_control_msg (c, cmd);
 }
 
-bool WayfireConnect::set_icon (void)
+bool WidgetConnect::set_icon (void)
 {
     connect_update_display (c);
     return false;
 }
 
-void WayfireConnect::init (Gtk::HBox *container)
+void WidgetConnect::init (Gtk::HBox *container)
 {
     /* Create the button */
     plugin = std::make_unique <Gtk::Button> ();
@@ -68,17 +68,17 @@ void WayfireConnect::init (Gtk::HBox *container)
     /* Setup structure */
     c = g_new0 (ConnectPlugin, 1);
     c->plugin = (GtkWidget *)((*plugin).gobj());
-    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WayfireConnect::set_icon));
+    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetConnect::set_icon));
 
     /* Initialise the plugin */
     read_settings ();
     connect_init (c);
 
     /* Setup callbacks */
-    animate_icon.set_callback (sigc::mem_fun (*this, &WayfireConnect::settings_changed_cb));
+    animate_icon.set_callback (sigc::mem_fun (*this, &WidgetConnect::settings_changed_cb));
 }
 
-WayfireConnect::~WayfireConnect()
+WidgetConnect::~WidgetConnect()
 {
     icon_timer.disconnect ();
     connect_destructor (c);
