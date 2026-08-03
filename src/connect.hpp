@@ -42,8 +42,6 @@ class WidgetConnect : public PanelWidget
 
     sigc::connection icon_timer;
 
-    WfOption <bool> animate_icon {"connect/animate_icon"};
-
     /* plugin */
     ConnectPlugin *c;
 
@@ -54,7 +52,7 @@ class WidgetConnect : public PanelWidget
     virtual ~WidgetConnect ();
     bool set_icon (void);
     void read_settings (void);
-    void settings_changed_cb (void);
+    void handle_config_reload (void);
 };
 
 #endif /* end of include guard: WIDGETS_CONNECT_HPP */

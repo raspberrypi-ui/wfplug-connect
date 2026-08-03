@@ -52,8 +52,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /*----------------------------------------------------------------------------*/
 
 conf_table_t conf_table[2] = {
-    {CONF_TYPE_BOOL, "animate_icon",    N_("Animate Icon"), NULL},
-    {CONF_TYPE_NONE, NULL,              NULL,               NULL}
+    {CONF_TYPE_BOOL, "animate_icon",    N_("Animate Icon"), NULL,   "true"  },
+    {CONF_TYPE_NONE, NULL,              NULL,               NULL,   NULL    }
 };
 
 /*----------------------------------------------------------------------------*/

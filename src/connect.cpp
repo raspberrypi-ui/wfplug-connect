@@ -39,12 +39,14 @@ extern "C" {
 
 void WidgetConnect::read_settings (void)
 {
-    c->animate = animate_icon;
+    conf_table[0].value = (void *) &c->animate;
+
+    load_configuration_data (PLUGIN_NAME, conf_table);
 }
 
-void WidgetConnect::settings_changed_cb (void)
+void WidgetConnect::handle_config_reload (void)
 {
-    read_settings ();
+    load_configuration_data (PLUGIN_NAME, conf_table);
 }
 
 void WidgetConnect::command (const char *cmd)
@@ -73,9 +75,6 @@ void WidgetConnect::init (Gtk::HBox *container)
     /* Initialise the plugin */
     read_settings ();
     connect_init (c);
-
-    /* Setup callbacks */
-    animate_icon.set_callback (sigc::mem_fun (*this, &WidgetConnect::settings_changed_cb));
 }
 
 WidgetConnect::~WidgetConnect()
