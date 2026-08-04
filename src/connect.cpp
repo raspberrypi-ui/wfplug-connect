@@ -37,13 +37,6 @@ extern "C" {
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
-void WidgetConnect::read_settings (void)
-{
-    conf_table[0].value = (void *) &c->animate;
-
-    load_configuration_data (PLUGIN_NAME, conf_table);
-}
-
 void WidgetConnect::handle_config_reload (void)
 {
     load_configuration_data (PLUGIN_NAME, conf_table);
@@ -73,7 +66,8 @@ void WidgetConnect::init (Gtk::HBox *container)
     icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetConnect::set_icon));
 
     /* Initialise the plugin */
-    read_settings ();
+    connect_set_values (c);
+    load_configuration_data (PLUGIN_NAME, conf_table);
     connect_init (c);
 }
 

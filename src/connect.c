@@ -450,6 +450,11 @@ void connect_update_display (ConnectPlugin *c)
     update_icon (c);
 }
 
+void connect_set_values (ConnectPlugin *c)
+{
+    conf_table[0].value = (void *) &c->animate;
+}
+
 /* Handler for control message */
 gboolean connect_control_msg (ConnectPlugin *c, const char *cmd)
 {

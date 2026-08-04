@@ -66,6 +66,7 @@ extern conf_table_t conf_table[2];
 /*----------------------------------------------------------------------------*/
 
 extern void connect_init (ConnectPlugin *c);
+extern void connect_set_values (ConnectPlugin *c);
 extern void connect_update_display (ConnectPlugin *c);
 extern gboolean connect_control_msg (ConnectPlugin *c, const char *cmd);
 extern void connect_destructor (ConnectPlugin *c);
