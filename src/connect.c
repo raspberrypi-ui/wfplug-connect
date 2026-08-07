@@ -440,7 +440,7 @@ static void connect_button_press_event (GtkButton *, ConnectPlugin *c)
 {
     CHECK_LONGPRESS
     show_menu (c);
-    show_menu_with_kbd (c->plugin, c->menu);
+    show_menu_with_kbd (c->plugin, c->menu, NULL);
 }
 
 /* Handler for system config changed message from panel */
