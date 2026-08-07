@@ -1,0 +1,3 @@
+wfplug-connect-dbgsym_1.14_arm64.deb debug optional automatic=yes
+wfplug-connect_1.14_arm64.buildinfo x11 optional
+wfplug-connect_1.14_arm64.deb x11 optional

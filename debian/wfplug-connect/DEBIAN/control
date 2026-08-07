@@ -1,0 +1,11 @@
+Package: wfplug-connect
+Version: 1.14
+Architecture: arm64
+Maintainer: Simon Long <simon@raspberrypi.com>
+Installed-Size: 218
+Depends: libc6 (>= 2.17), libgcc-s1 (>= 3.0), libglib2.0-0t64 (>= 2.28.0), libglibmm-2.4-1t64 (>= 2.66.8), libgtk-3-0t64 (>= 3.0.0), libgtkmm-3.0-1t64 (>= 3.24.10), libstdc++6 (>= 12), wf-panel-pi (>= 1.23), gtk-update-icon-cache
+Section: x11
+Priority: optional
+Homepage: http://raspberrypi.com/
+Description: Raspberry Pi Connect plugin for wf-panel-pi
+ Plugin for wf-panel-pi to control Raspberry Pi Connect.

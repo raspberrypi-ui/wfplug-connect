@@ -37,23 +37,22 @@ extern "C" {
     const char *package_name (void) { return GETTEXT_PACKAGE; };
 }
 
-void WidgetConnect::handle_config_reload (void)
-{
-    load_configuration_data (PLUGIN_NAME, conf_table);
-}
-
-void WidgetConnect::command (const char *cmd)
+void WidgetConnect::widget_command (const char *cmd)
 {
     connect_control_msg (c, cmd);
 }
 
-bool WidgetConnect::set_icon (void)
+void WidgetConnect::widget_set_icon (void)
 {
     connect_update_display (c);
-    return false;
 }
 
-void WidgetConnect::init (Gtk::HBox *container)
+void WidgetConnect::widget_config_reload (void)
+{
+    load_configuration_data (PLUGIN_NAME, conf_table);
+}
+
+void WidgetConnect::widget_init (Gtk::HBox *container)
 {
     /* Create the button */
     plugin = std::make_unique <Gtk::Button> ();
@@ -63,7 +62,6 @@ void WidgetConnect::init (Gtk::HBox *container)
     /* Setup structure */
     c = g_new0 (ConnectPlugin, 1);
     c->plugin = (GtkWidget *)((*plugin).gobj());
-    icon_timer = Glib::signal_idle().connect (sigc::mem_fun (*this, &WidgetConnect::set_icon));
 
     /* Initialise the plugin */
     connect_set_values (c);
@@ -73,7 +71,6 @@ void WidgetConnect::init (Gtk::HBox *container)
 
 WidgetConnect::~WidgetConnect()
 {
-    icon_timer.disconnect ();
     connect_destructor (c);
 }
 
