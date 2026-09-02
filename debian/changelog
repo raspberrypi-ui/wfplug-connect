@@ -1,3 +1,9 @@
+wfplug-connect (1.16) trixie; urgency=medium
+
+  * Version bump for build
+
+ -- Simon Long <simon@raspberrypi.com>  Wed, 02 Sep 2026 13:26:09 +0100
+
 wfplug-connect (1.15) trixie; urgency=medium
 
   * Modify for new lxpanel shims
