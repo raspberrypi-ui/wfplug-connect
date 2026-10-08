@@ -99,6 +99,7 @@ static void check_installed (ConnectPlugin *c)
 static void cb_name_owned (GDBusConnection *conn, const gchar *name, const gchar *, ConnectPlugin *c)
 {
     DEBUG ("Name %s owned on DBus", name);
+    c->enabled = TRUE;
     check_installed (c);
 
     // create the proxy
@@ -222,10 +223,6 @@ static void cb_status_req (GObject *source, GAsyncResult *res, ConnectPlugin *c)
     GError *error = NULL;
     GVariant *var = g_dbus_proxy_call_finish (G_DBUS_PROXY (source), res, &error);
     
-    // update the enabled flag here in case it has changed externally
-    if (!system ("systemctl --user -q is-active rpi-connect.service")) c->enabled = TRUE;
-    else c->enabled = FALSE;
-
     if (error)
     {
         DEBUG ("Status - error %s", error->message);

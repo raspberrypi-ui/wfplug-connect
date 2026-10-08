@@ -1,3 +1,9 @@
+wfplug-connect (1.18) trixie; urgency=medium
+
+  * Use presence on DBus to detect whether Connect is enabled
+
+ -- Simon Long <simon@raspberrypi.com>  Thu, 08 Oct 2026 16:21:15 +0100
+
 wfplug-connect (1.17) trixie; urgency=medium
 
   * Add tooltip for widget browser
